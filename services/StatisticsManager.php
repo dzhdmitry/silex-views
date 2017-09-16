@@ -3,13 +3,10 @@
 namespace Service;
 
 use Doctrine\DBAL\Connection;
+use Entities\ViewRecord;
 
 class StatisticsManager
 {
-    const TYPE_LOADED = 'loaded';
-    const TYPE_PROGRESS = 'progress';
-    const TYPE_FINISHED = 'finished';
-
     /**
      * @var Connection
      */
@@ -21,21 +18,20 @@ class StatisticsManager
     }
 
     /**
-     * @param string $cookie
-     * @param string $type
-     * @param $payload
+     * @param ViewRecord $record
      * @return bool
      */
-    public function save($cookie, $type, $payload)
+    public function save(ViewRecord $record)
     {
         $now = new \DateTime();
-        $statement = $this->connection->prepare('INSERT INTO views (cookie, type, payload, timestamp) 
+        $statement = $this->connection->prepare('
+            INSERT INTO views (cookie, type, payload, timestamp) 
             VALUES (:cookie, :type, :payload, :timestamp)');
 
         return $statement->execute([
-            ':cookie' => $cookie,
-            ':type' => $type,
-            ':payload' => $payload,
+            ':cookie' => $record->cookie,
+            ':type' => $record->type,
+            ':payload' => $record->payload,
             ':timestamp' => $now->getTimestamp(),
         ]);
     }
@@ -89,9 +85,9 @@ class StatisticsManager
             ) as f ON l.cookie = f.cookie");
 
         $statement->execute([
-            ':loaded' => self::TYPE_LOADED,
-            ':progress' => self::TYPE_PROGRESS,
-            ':finished' => self::TYPE_FINISHED,
+            ':loaded' => ViewRecord::TYPE_LOADED,
+            ':progress' => ViewRecord::TYPE_PROGRESS,
+            ':finished' => ViewRecord::TYPE_FINISHED,
         ]);
 
         return $statement->fetchAll();

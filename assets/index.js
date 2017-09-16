@@ -45,10 +45,6 @@ var Video = (function($) {
                 url: '/stat',
                 dataType: 'json',
                 data: data
-            }).done(function() {
-                //
-            }).fail(function() {
-                //
             });
         };
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use Service\StatisticsManager;
+use Service\ViewRecordFactory;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +18,11 @@ class IndexController
      */
     public function getIndex(Request $request, Application $app)
     {
-        $response = new Response($app['twig']->render('index.twig', [
-            //
-        ]));
+        $response = new Response($app['twig']->render('index.twig'));
 
-        if (!$request->cookies->has('ua')) {
-            $ua = $request->headers->get('user-agent');
-            $uaHashed = md5($ua);
-            $cookie = new Cookie('ua', $uaHashed);
+        if (!$request->cookies->has(ViewRecordFactory::COOKIE_NAME)) {
+            $userAgent = $request->headers->get('user-agent');
+            $cookie = new Cookie(ViewRecordFactory::COOKIE_NAME, md5($userAgent));
 
             $response->headers->setCookie($cookie);
         }
@@ -33,11 +31,10 @@ class IndexController
     }
 
     /**
-     * @param Request $request
      * @param Application $app
      * @return mixed
      */
-    public function getStat(Request $request, Application $app)
+    public function getStat(Application $app)
     {
         $statistics = $this->getStatisticsManager($app)->getStatistics();
 
@@ -53,22 +50,25 @@ class IndexController
      */
     public function postStat(Request $request, Application $app)
     {
-        if ($request->cookies->has('ua')) {
-            $data = $request->request->all();
-            $cookie = $request->cookies->get('ua');
+        $record = $app['view_record_factory']->fromRequest($request);
 
-            $this->getStatisticsManager($app)->save($cookie, $data['type'], $data['payload']);
-
-            $response = array_merge($data, [
-                'success' => true
-            ]);
-        } else {
-            $response = [
+        if (!$record) {
+            return $app->json([
                 'success' => false
-            ];
+            ]);
         }
 
-        return $app->json($response);
+        $success = $this->getStatisticsManager($app)->save($record);
+
+        if (!$success) {
+            return $app->json([
+                'success' => false
+            ]);
+        }
+
+        return $app->json(array_merge($request->request->all(), [
+            'success' => true
+        ]));
     }
 
     /**
