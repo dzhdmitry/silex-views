@@ -3,7 +3,9 @@
 namespace App;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class IndexController
 {
@@ -14,11 +16,19 @@ class IndexController
      */
     public function getIndex(Request $request, Application $app)
     {
-        //
-
-        return $app['twig']->render('index.twig', [
+        $response = new Response($app['twig']->render('index.twig', [
             //
-        ]);
+        ]));
+
+        if (!$request->cookies->has('ua')) {
+            $ua = $request->headers->get('user-agent');
+            $uaHashed = md5($ua);
+            $cookie = new Cookie('ua', $uaHashed);
+
+            $response->headers->setCookie($cookie);
+        }
+
+        return $response;
     }
 
     /**
@@ -42,10 +52,20 @@ class IndexController
      */
     public function postStat(Request $request, Application $app)
     {
-        //
+        if ($request->cookies->has('ua')) {
+            $data = $request->request->all();
 
-        return $app['twig']->render('stat.twig', [
-            //
-        ]);
+            //save
+
+            $response = array_merge($data, [
+                'success' => true
+            ]);
+        } else {
+            $response = [
+                'success' => false
+            ];
+        }
+
+        return $app->json($response);
     }
 }

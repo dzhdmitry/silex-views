@@ -5,3 +5,10 @@
 {% block body %}
     index
 {% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="/assets/index.js"></script>
+{% endblock %}
