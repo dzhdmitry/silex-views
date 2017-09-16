@@ -39,10 +39,10 @@ class IndexController
      */
     public function getStat(Request $request, Application $app)
     {
-        //
+        $statistics = $this->getStatisticsManager($app)->getStatistics();
 
         return $app['twig']->render('stat.twig', [
-            //
+            'statistics' => $statistics
         ]);
     }
 
@@ -54,12 +54,10 @@ class IndexController
     public function postStat(Request $request, Application $app)
     {
         if ($request->cookies->has('ua')) {
-            /** @var StatisticsManager $manager */
             $data = $request->request->all();
-            $manager = $app['statistics_manager'];
             $cookie = $request->cookies->get('ua');
 
-            $manager->save($cookie, $data['type'], $data['payload']);
+            $this->getStatisticsManager($app)->save($cookie, $data['type'], $data['payload']);
 
             $response = array_merge($data, [
                 'success' => true
@@ -71,5 +69,14 @@ class IndexController
         }
 
         return $app->json($response);
+    }
+
+    /**
+     * @param Application $app
+     * @return StatisticsManager
+     */
+    private function getStatisticsManager(Application $app)
+    {
+        return $app['statistics_manager'];
     }
 }

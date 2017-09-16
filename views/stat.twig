@@ -3,5 +3,29 @@
 {% block title %}Statistics - Views{% endblock %}
 
 {% block body %}
-    stat
+    <table>
+        <thead>
+        <tr>
+            <th>Cookie</th>
+            <th>Количество загрузок</th>
+            <th>Глубина просмотра 25%</th>
+            <th>Глубина просмотра 50%</th>
+            <th>Глубина просмотра 75%</th>
+            <th>Просмотр полностью</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for row in statistics %}
+            <tr>
+                <td>{{ row.cookie }}</td>
+                <td>{{ row.loaded }}</td>
+                <td>{{ row.progress25 }}</td>
+                <td>{{ row.progress50 }}</td>
+                <td>{{ row.progress75 }}</td>
+                <td>{{ row.finished }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
