@@ -6,6 +6,10 @@ $app = new Silex\Application();
 
 $app['debug'] = true;
 
+$app['statistics_manager'] = function ($app) {
+    return new Service\StatisticsManager($app['db']);
+};
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver'   => 'pdo_sqlite',

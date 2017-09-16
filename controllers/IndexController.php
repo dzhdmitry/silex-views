@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Service\StatisticsManager;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,9 +54,12 @@ class IndexController
     public function postStat(Request $request, Application $app)
     {
         if ($request->cookies->has('ua')) {
+            /** @var StatisticsManager $manager */
             $data = $request->request->all();
+            $manager = $app['statistics_manager'];
+            $cookie = $request->cookies->get('ua');
 
-            //save
+            $manager->save($cookie, $data['type'], $data['payload']);
 
             $response = array_merge($data, [
                 'success' => true
