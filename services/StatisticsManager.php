@@ -18,6 +18,8 @@ class StatisticsManager
     }
 
     /**
+     * Save ViewRecord into `views` table
+     *
      * @param ViewRecord $record
      * @return bool
      */
@@ -37,6 +39,8 @@ class StatisticsManager
     }
 
     /**
+     * Fetch views statistics
+     *
      * @return array
      */
     public function getStatistics()

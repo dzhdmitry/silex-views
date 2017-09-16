@@ -1,9 +1,14 @@
 {% extends "base.twig" %}
 
-{% block title %}Statistics - Views{% endblock %}
+{% block title %}Статистика{% endblock %}
 
 {% block body %}
-    <table>
+    <ol class="breadcrumb">
+        <li><a href="{{ path("index") }}">Главная страница</a></li>
+        <li class="active">Статистика</li>
+    </ol>
+
+    <table class="table table-condensed">
         <thead>
         <tr>
             <th>Cookie</th>
@@ -24,6 +29,10 @@
                 <td>{{ row.progress50 }}</td>
                 <td>{{ row.progress75 }}</td>
                 <td>{{ row.finished }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="info text-center">Пока нет статистики</td>
             </tr>
         {% endfor %}
         </tbody>

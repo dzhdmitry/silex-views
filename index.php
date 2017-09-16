@@ -31,10 +31,10 @@ $app['view_record_factory'] = function ($app) {
 };
 
 // Configuring routes
-$app->get('/', 'App\\IndexController::getIndex')->bind('index');
+$app->get('/', 'App\\IndexController::getIndexAction')->bind('index');
 
-$app->get('/stat', 'App\\IndexController::getStat')->bind('stat');
+$app->get('/stat', 'App\\IndexController::getStatAction')->bind('stat');
 
-$app->post('/stat', 'App\\IndexController::postStat');
+$app->post('/stat', 'App\\IndexController::postStatAction');
 
 $app->run();

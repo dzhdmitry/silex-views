@@ -6,6 +6,7 @@ use Service\StatisticsManager;
 use Service\ViewRecordFactory;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,9 +15,9 @@ class IndexController
     /**
      * @param Request $request
      * @param Application $app
-     * @return mixed
+     * @return Response
      */
-    public function getIndex(Request $request, Application $app)
+    public function getIndexAction(Request $request, Application $app)
     {
         $response = new Response($app['twig']->render('index.twig'));
 
@@ -34,7 +35,7 @@ class IndexController
      * @param Application $app
      * @return mixed
      */
-    public function getStat(Application $app)
+    public function getStatAction(Application $app)
     {
         $statistics = $this->getStatisticsManager($app)->getStatistics();
 
@@ -46,9 +47,9 @@ class IndexController
     /**
      * @param Request $request
      * @param Application $app
-     * @return mixed
+     * @return JsonResponse
      */
-    public function postStat(Request $request, Application $app)
+    public function postStatAction(Request $request, Application $app)
     {
         $record = $app['view_record_factory']->fromRequest($request);
 

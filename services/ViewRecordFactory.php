@@ -22,6 +22,8 @@ class ViewRecordFactory
     }
 
     /**
+     * Build ViewRecord from Request data
+     *
      * @param Request $request
      * @return ViewRecord|false
      */
@@ -45,6 +47,8 @@ class ViewRecordFactory
     }
 
     /**
+     * Validate request data before creating ViewRecord
+     *
      * @param mixed $data
      * @return bool
      */
