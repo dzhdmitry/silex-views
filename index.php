@@ -5,18 +5,17 @@ require_once __DIR__.'/vendor/autoload.php';
 $app = new Silex\Application();
 
 // Registering Silex components
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
-$app->register(new Silex\Provider\DoctrineServiceProvider(), [
-    'db.options' => [
-        'driver' => 'pdo_sqlite',
-        'path' => __DIR__ . '/app.db',
-    ],
-]);
-
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__ . '/views',
-));
+$app
+    ->register(new Silex\Provider\ValidatorServiceProvider())
+    ->register(new Silex\Provider\DoctrineServiceProvider(), [
+        'db.options' => [
+            'driver' => 'pdo_sqlite',
+            'path' => __DIR__ . '/app.db',
+        ],
+    ])
+    ->register(new Silex\Provider\TwigServiceProvider(), array(
+        'twig.path' => __DIR__ . '/views',
+    ));
 
 // Setting debug mode
 $app['debug'] = true;
@@ -31,10 +30,10 @@ $app['view_record_factory'] = function ($app) {
 };
 
 // Configuring routes
-$app->get('/', 'App\\IndexController::getIndexAction')->bind('index');
+$app->get('/', 'Controller\\IndexController::getIndexAction')->bind('index');
 
-$app->get('/stat', 'App\\IndexController::getStatAction')->bind('stat');
+$app->get('/stat', 'Controller\\IndexController::getStatAction')->bind('stat');
 
-$app->post('/stat', 'App\\IndexController::postStatAction');
+$app->post('/stat', 'Controller\\IndexController::postStatAction');
 
 $app->run();

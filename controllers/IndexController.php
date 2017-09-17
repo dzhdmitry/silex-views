@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Controller;
 
 use Service\StatisticsManager;
 use Service\ViewRecordFactory;
@@ -40,7 +40,7 @@ class IndexController
         $statistics = $this->getStatisticsManager($app)->getStatistics();
 
         return $app['twig']->render('stat.twig', [
-            'statistics' => $statistics
+            'statistics' => $statistics,
         ]);
     }
 
@@ -55,7 +55,7 @@ class IndexController
 
         if (!$record) {
             return $app->json([
-                'success' => false
+                'success' => false,
             ]);
         }
 
@@ -63,12 +63,12 @@ class IndexController
 
         if (!$success) {
             return $app->json([
-                'success' => false
+                'success' => false,
             ]);
         }
 
         return $app->json(array_merge($request->request->all(), [
-            'success' => true
+            'success' => true,
         ]));
     }
 

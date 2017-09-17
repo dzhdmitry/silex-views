@@ -13,6 +13,7 @@ silex-views
 Как запустить:
 
 ```
+composer install
 php -S 127.0.0.1 -t <path_to_root>
 ```
 

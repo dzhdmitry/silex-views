@@ -2,7 +2,7 @@
 
 namespace Service;
 
-use Entities\ViewRecord;
+use Entity\ViewRecord;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -56,10 +56,10 @@ class ViewRecordFactory
     {
         $constraint = new Assert\Collection([
             'type' => new Assert\Choice([
-                'choices' => ViewRecord::getTypes()
+                'choices' => ViewRecord::getTypes(),
             ]),
             'payload' => new Assert\Regex([
-                'pattern' => '/^(?:|25|50|75)$/'
+                'pattern' => '/^(?:|25|50|75)$/',
             ]),
         ]);
 

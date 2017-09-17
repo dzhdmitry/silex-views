@@ -3,8 +3,8 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "App\\": "controllers/",
-            "Entities\\": "entities/",
+            "Controller\\": "controllers/",
+            "Entity\\": "entities/",
             "Service\\": "services/"
         }
     },

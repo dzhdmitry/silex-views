@@ -3,7 +3,7 @@
 namespace Service;
 
 use Doctrine\DBAL\Connection;
-use Entities\ViewRecord;
+use Entity\ViewRecord;
 
 class StatisticsManager
 {
@@ -28,7 +28,8 @@ class StatisticsManager
         $now = new \DateTime();
         $statement = $this->connection->prepare('
             INSERT INTO views (cookie, type, payload, timestamp) 
-            VALUES (:cookie, :type, :payload, :timestamp)');
+            VALUES (:cookie, :type, :payload, :timestamp)
+        ');
 
         return $statement->execute([
             ':cookie' => $record->cookie,
@@ -86,7 +87,8 @@ class StatisticsManager
                 FROM views
                 WHERE type = :finished
                 GROUP BY cookie
-            ) as f ON l.cookie = f.cookie");
+            ) as f ON l.cookie = f.cookie
+        ");
 
         $statement->execute([
             ':loaded' => ViewRecord::TYPE_LOADED,
